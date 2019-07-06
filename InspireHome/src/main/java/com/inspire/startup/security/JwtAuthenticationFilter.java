@@ -17,18 +17,24 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.inspire.startup.config.JwtConfig;
 import com.inspire.startup.exception.BadRequestException;
 import com.inspire.startup.service.CustomUserDetailsService;
 
-
-
+/**
+ * @author Anoop
+ *
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	   @Autowired
+	    @Autowired
 	    private JwtTokenProvider tokenProvider;
 
 	    @Autowired
 	    private CustomUserDetailsService customUserDetailsService;
+	    
+	    @Autowired
+	    private JwtConfig jwtConfig;
 
 	    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -58,14 +64,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	        filterChain.doFilter(request, response);
 	    }
 
+	    
+	    
 	    private String getJwtFromRequest(HttpServletRequest request) {
 	        String bearerToken = request.getHeader("Authorization");
 	        
-	        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-	           //throw new BadRequestException("JWT Token is missing");
+	        if (bearerToken == null || !bearerToken.startsWith(jwtConfig.getJwtTokenPrefix())) {
+	           logger.error("JWT Token is missing");
 	        }
-	        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-	            return bearerToken.substring(7, bearerToken.length());
+	        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtConfig.getJwtTokenPrefix())) {
+	            return bearerToken.substring(jwtConfig.getJwtTokenPrefix().length()+1, bearerToken.length());
 	        }
 	        return null;
 	    }

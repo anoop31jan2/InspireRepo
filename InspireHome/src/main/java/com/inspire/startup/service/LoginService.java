@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.inspire.startup.config.JwtConfig;
 import com.inspire.startup.payload.FirstTimeLoginResponse;
 import com.inspire.startup.payload.JwtAuthenticationResponse;
 import com.inspire.startup.security.JwtTokenProvider;
@@ -18,7 +19,10 @@ import lombok.NoArgsConstructor;
 public class LoginService {
 
 	@Autowired
-    JwtTokenProvider tokenProvider;
+    private JwtTokenProvider tokenProvider;
+	
+	@Autowired
+	private JwtConfig jwtConfig;
 	
 	
 	public ResponseEntity<?> authenticateUser( Authentication authentication)
@@ -40,7 +44,12 @@ public class LoginService {
 
         
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        
+        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+        jwtAuthenticationResponse.setAccessToken(jwt);
+        jwtAuthenticationResponse.setTokenType(jwtConfig.getJwtTokenPrefix());
+        
+        return ResponseEntity.ok(jwtAuthenticationResponse);
 		
 		
 	}

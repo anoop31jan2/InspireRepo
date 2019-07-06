@@ -49,12 +49,6 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter{
             .and()
         .csrf()
             .disable()
-        .exceptionHandling()
-            .authenticationEntryPoint(unauthorizedHandler)
-            .and()
-        .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
         .authorizeRequests()
             .antMatchers("/",
                 "/favicon.ico",
@@ -68,9 +62,19 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
             .antMatchers("/api/auth/**")
                 .permitAll()
-            .anyRequest()
-                .authenticated();
-
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        		
+				
+		
+		
+           
+		
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
 
@@ -97,5 +101,10 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 
 
+	@Bean
+	public JwtConfig jwtConfig() {
+		
+		return  new JwtConfig();
+	}
 
 }
