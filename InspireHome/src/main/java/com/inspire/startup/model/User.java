@@ -1,5 +1,6 @@
 package com.inspire.startup.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.inspire.startup.util.StringConstants;
@@ -26,42 +27,47 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
-	
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    @Column(name = "INSPIRE_ID")
-	    private Long inspireId;
+public class User implements Serializable{
 
-	    @Column(name="MOBILE_NUMBER",unique=true)
-	    private String mobileNumber;
+	private static final long serialVersionUID = 1L;
 
-	    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	    @JoinTable(name = StringConstants.USER_ROLES,joinColumns=@JoinColumn(name="USER_ID"),inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
-	    private Set<Role> roles;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "INSPIRE_ID")
+	private Integer inspireId;
 
-	    @Column(name = "USER_NAME",unique=true)
-	    private String userName;
+	@Column(name="MOBILE_NUMBER",unique=true)
+	private String mobileNumber;
 
-	    @Column(name = "USER_PASSWORD")
-	    private String userPassword;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = StringConstants.USER_ROLES,joinColumns=@JoinColumn(name="USER_ID"),inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
+	private Set<Role> roles;
 
-	    @Column(name = "USER_EMAIL",unique=true)
-	    private String email;
+	@Column(name = "USER_NAME")
+	private String userName;
 
-	    @Column(name = "IS_FIRST_TIME_USER")
-	    private Boolean isMaidenLogin;
+	@Column(name = "USER_PASSWORD")
+	private String userPassword;
 
-	    @Column(name = "CREATED_BY")
-	    private String createdBy;
+	@Column(name = "USER_EMAIL",unique=true)
+	private String email;
 
-	    @Column(name = "UPDATED_BY")
-	    private String updatedBy;
+	@Column(name = "IS_FIRST_TIME_USER")
+	private Boolean isMaidenLogin;
 
-	    @Column(name = "CREATED_DATE")  
-	    private LocalDateTime createdDate;
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
-	    @Column(name = "UPDATED_DATE")
-	    private LocalDateTime updatedDate;
+	@Column(name = "CREATED_BY")
+	private String createdBy;
+
+	@Column(name = "UPDATED_BY")
+	private String updatedBy;
+
+	@Column(name = "CREATED_DATE")  
+	private LocalDateTime createdDate;
+
+	@Column(name = "UPDATED_DATE")
+	private LocalDateTime updatedDate;
 
 }

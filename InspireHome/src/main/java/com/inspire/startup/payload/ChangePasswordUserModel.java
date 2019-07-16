@@ -19,6 +19,7 @@ public class ChangePasswordUserModel {
 	@NotBlank
 	private String password;
 	
+	
 	private String email;
 	
 }

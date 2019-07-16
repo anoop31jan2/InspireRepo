@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> , JpaSpecifica
 
 	
 	
-	Optional<User> findByInspireId(Long valueOf);
+	Optional<User> findByInspireId(Integer valueOf);
 
 	Optional<User> findByUserName(String userName);
 	

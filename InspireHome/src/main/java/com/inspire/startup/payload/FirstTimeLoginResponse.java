@@ -1,6 +1,7 @@
 package com.inspire.startup.payload;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -9,15 +10,19 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class FirstTimeLoginResponse {
 
-	private String userName;
+	private String mobileNumber;
+	
+	private String email;
 
 	private String message ;
-	public FirstTimeLoginResponse(String message,String userName) {
+	public FirstTimeLoginResponse(String message,String mobileNumber,String email) {
 		super();
 		this.message= message;
-		this.userName = userName;
+		this.mobileNumber = mobileNumber;
+		this.email=email;
 	}
 	
 	

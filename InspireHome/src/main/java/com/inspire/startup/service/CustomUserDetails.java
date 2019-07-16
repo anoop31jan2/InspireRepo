@@ -24,7 +24,7 @@ public class CustomUserDetails implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Integer id;
 
 	private String username;
 	
@@ -39,6 +39,7 @@ public class CustomUserDetails implements UserDetails {
 	@JsonIgnore
 	private boolean isFirstTimeLogin;
 
+	private boolean isActive;
 
 
 	public boolean isFirstTimeLogin() {
@@ -63,8 +64,8 @@ public class CustomUserDetails implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public CustomUserDetails(Long id,String username, String email,String mobileNumber, String password, Collection<? extends GrantedAuthority> authorities,
-			boolean isFirstTimeLogin) {
+	public CustomUserDetails(Integer id,String username, String email,String mobileNumber, String password, Collection<? extends GrantedAuthority> authorities,
+			boolean isFirstTimeLogin,boolean isActive) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -72,6 +73,7 @@ public class CustomUserDetails implements UserDetails {
 		this.authorities = authorities;
 		this.isFirstTimeLogin = isFirstTimeLogin;
 		this.mobileNumber = mobileNumber;
+		this.isActive=isActive;
 	}
 
 	public static CustomUserDetails create(User user) {
@@ -86,7 +88,8 @@ public class CustomUserDetails implements UserDetails {
 				user.getMobileNumber(),
 				user.getUserPassword(),
 				authorities,
-				user.getIsMaidenLogin()
+				user.getIsMaidenLogin(),
+				user.getIsActive()
 				);
 	}
 
@@ -128,11 +131,11 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return isActive;
 	}
 
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 

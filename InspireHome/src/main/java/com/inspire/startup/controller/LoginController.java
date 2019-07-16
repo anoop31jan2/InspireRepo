@@ -66,7 +66,7 @@ public class LoginController {
 	    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordUserModel userModel) throws IOException, ServletException {
 
 	        Optional<User> loggedInUserEntity =  userRepository.findByMobileNumberOrEmail(userModel.getMobileNumber(), userModel.getEmail());
-	        loggedInUserEntity.orElseThrow(()-> new UsernameNotFoundException("No user found with given userName "+userModel.getUserName())) ;
+	        loggedInUserEntity.orElseThrow(()-> new UsernameNotFoundException("No user found with given userName ")) ;
 
 	        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder() ;
 	       User usersEntity =  loggedInUserEntity.map(user->{

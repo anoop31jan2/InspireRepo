@@ -1,5 +1,7 @@
 package com.inspire.startup.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,11 +22,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Role {
+public class Role implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ROLE_ID")
-	private int roleId;
+	private Integer roleId;
 
 	@Column(name = "ROLE")
 	private String role;

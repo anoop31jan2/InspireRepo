@@ -1,6 +1,7 @@
 package com.inspire.startup.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,42 +20,49 @@ import lombok.NoArgsConstructor;
 public class LoginService {
 
 	@Autowired
-    private JwtTokenProvider tokenProvider;
-	
+	private JwtTokenProvider tokenProvider;
+
 	@Autowired
 	private JwtConfig jwtConfig;
-	
-	
+
+
 	public ResponseEntity<?> authenticateUser( Authentication authentication)
 	{
-		
-		
-		
+
+
+
 		CustomUserDetails principal = (CustomUserDetails)authentication. getPrincipal();
-        if (principal instanceof UserDetails) {
-        String username = principal. getUsername();
-        
-        if(!principal.isFirstTimeLogin())
-          
-        return ResponseEntity.ok(new FirstTimeLoginResponse("Please change your default password",username));
-        
-        }
+		if (principal instanceof UserDetails) {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+			if(!principal.isEnabled()) {
+              
+				
+				return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not active.Please contact to System adminstrator");
 
-        
-        String jwt = tokenProvider.generateToken(authentication);
-        
-        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-        jwtAuthenticationResponse.setAccessToken(jwt);
-        jwtAuthenticationResponse.setTokenType(jwtConfig.getJwtTokenPrefix());
-        
-        return ResponseEntity.ok(jwtAuthenticationResponse);
-		
-		
+			}
+
+
+			if(!principal.isFirstTimeLogin())
+
+				return ResponseEntity.ok(new FirstTimeLoginResponse("Please change your default password",principal.getMobileNumber(),principal.getEmail()));
+
+		}
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+		String jwt = tokenProvider.generateToken(authentication);
+
+		JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+		jwtAuthenticationResponse.setAccessToken(jwt);
+		jwtAuthenticationResponse.setTokenType(jwtConfig.getJwtTokenPrefix());
+
+		return ResponseEntity.ok(jwtAuthenticationResponse);
+
+
 	}
-	
-	
-	
-	
+
+
+
+
 }

@@ -1,27 +1,34 @@
 package com.inspire.startup.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inspire.startup.payload.ParentDashboardResponse;
 import com.inspire.startup.service.CustomUserDetails;
+import com.inspire.startup.service.ParentService;
 
 @RestController
 @RequestMapping("/inspire")
 public class ParentController {
+	
+	@Autowired
+	private ParentService parentService;
 
-	@GetMapping("/hello")
-	public String syaHello() {
+	@GetMapping("/parent/students")
+	public ResponseEntity<?> getStudentList() {
 		
-		String username=null;
+		
 		CustomUserDetails principal = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		if(principal instanceof UserDetails)
-			username= principal.getUsername();
-			
-		return "Hello Parent, welcome to the Inspire world "+username;
+		ParentDashboardResponse parentDashboardResponse = parentService.getStudentList(principal);
+		
+			System.out.println("User id ======> "+principal.getId());
+		return ResponseEntity.ok(parentDashboardResponse);
 	}
 	
 	
