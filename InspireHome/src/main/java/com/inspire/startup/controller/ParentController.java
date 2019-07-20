@@ -27,7 +27,6 @@ public class ParentController {
 		
 		ParentDashboardResponse parentDashboardResponse = parentService.getStudentList(principal);
 		
-			System.out.println("User id ======> "+principal.getId());
 		return ResponseEntity.ok(parentDashboardResponse);
 	}
 	
