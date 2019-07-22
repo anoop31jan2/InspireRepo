@@ -19,9 +19,6 @@ import com.inspire.startup.model.User;
  */
 public class CustomUserDetails implements UserDetails {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
