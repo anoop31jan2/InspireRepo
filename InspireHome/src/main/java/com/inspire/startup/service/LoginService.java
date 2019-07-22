@@ -34,18 +34,9 @@ public class LoginService {
 		CustomUserDetails principal = (CustomUserDetails)authentication. getPrincipal();
 		if (principal instanceof UserDetails) {
 
-			if(!principal.isEnabled()) {
-              
-				
-				return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not active.Please contact to System adminstrator");
-
-			}
-
-
 			if(!principal.isFirstTimeLogin())
 
 				return ResponseEntity.ok(new FirstTimeLoginResponse("Please change your default password",principal.getMobileNumber(),principal.getEmail()));
-
 		}
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
